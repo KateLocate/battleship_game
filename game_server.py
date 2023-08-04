@@ -14,9 +14,29 @@ import asyncio
 
 
 class Game:
-    ...
+    PLAYERS = {'player_1': None, 'player_2': None}  # connections storage
+
+    field_1, field_2 = [['*' * 10] * 10], [['*' * 10] * 10]
+
+    def add_players(self):
+        ...
+
+    def autogenerate_ships(self):
+        ...
+
+    async def handler(self, websocket):
+        user_id = ...  # identify user in your app's context
+        self.PLAYERS[user_id] = websocket
+        try:
+            await websocket.wait_closed()
+        finally:
+            del self.PLAYERS[user_id]
+
+    def message_all(self, message):
+        websockets.broadcast(self.PLAYERS, message)
 
 
+# websockets usage example
 async def hello(websocket):
     name = await websocket.recv()
     print(f"<<< {name}")
